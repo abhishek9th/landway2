@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #e63946;
+  --accent-dark: #c42d39;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+  overflow-x: hidden;
+  max-width: 100%;
+  overscroll-behavior-x: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  @apply min-h-screen bg-bg text-text font-body;
+  overflow-x: hidden;
+  max-width: 100%;
+  overscroll-behavior-x: none;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+
+img,
+video,
+iframe,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-4 sm:px-6 lg:px-16;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-luxe text-accent-dark;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-8 shrink-0 bg-accent/50;
+  }
+  .h-display {
+    @apply font-display font-extrabold leading-[1.04] tracking-[-0.03em] text-ink;
+  }
+  .lead {
+    @apply text-muted text-base sm:text-lg leading-relaxed font-body;
+  }
+  .card-base {
+    @apply rounded-xl2 bg-card border border-line shadow-soft;
+  }
+  .glass {
+    @apply bg-white/60 backdrop-blur-xl border border-white/40;
+  }
+
+  /* Buttons — ripple handled by the Button component's overflow-hidden span. */
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold font-alt transition-all duration-500 ease-luxe overflow-hidden;
+    min-height: 48px;
+    max-width: 100%;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:shadow-accent;
+  }
+  .btn-dark {
+    @apply btn bg-ink text-white hover:bg-black;
+  }
+  .btn-ghost {
+    @apply btn border border-ink/15 text-ink hover:border-ink/40;
+  }
+  .btn-white {
+    @apply btn bg-white text-ink hover:bg-white/90;
+  }
+  .btn-outline-light {
+    @apply btn border border-white/40 text-white hover:bg-white/10;
+  }
+
+  @media (max-width: 639px) {
+    .btn {
+      @apply w-full px-5;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .arrow-slide {
+    @apply transition-transform duration-500 ease-luxe;
+  }
+  .group:hover .arrow-slide {
+    transform: translateX(4px);
+  }
+  /* Subtle film-grain noise overlay (inline SVG, no network request). */
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+}
+
+@keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 639px) {
+  html {
+    scroll-padding-top: 80px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* EMI calculator range slider */
+.emi-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--emi-pct, 0%),
+    rgba(0, 0, 0, 0.1) var(--emi-pct, 0%),
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+.emi-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(230, 57, 70, 0.35);
+  cursor: grab;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.emi-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.12);
+}
+.emi-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(230, 57, 70, 0.35);
+  cursor: grab;
+}
+.emi-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: transparent;
+}
+.emi-slider:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
